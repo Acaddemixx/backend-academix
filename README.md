@@ -1,8 +1,8 @@
-### backend project
+# backend project
 
 ## Getting started
 
-# Setting up a project
+### Setting up a project
 
 * Move into your projects directory: cd !/your project directory
 * clone this repository: git clone https://github.com/GDSC-Hackton-Group-10/backend-academix.git
