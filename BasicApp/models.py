@@ -1,10 +1,9 @@
 from django.db import models
-from UserApp.models import Admin
 
 # Create your models here.
 
 class Department(models.Model):
-    head = models.OneToOneField(Admin) 
+    head = models.OneToOneField('UserApp.Admin', null=True, on_delete=models.SET_NULL, related_name='department_head')
     name = models.CharField(max_length = 50)
     overview = models.TextField()
     #vector field comming
@@ -25,9 +24,3 @@ class Building(models.Model):
     type = models.CharField(max_length = 50)
     description = models.TextField()
     #vector field comming
-
-    
-
-
-
-
