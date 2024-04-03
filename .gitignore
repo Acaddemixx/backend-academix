@@ -6,6 +6,7 @@ __pycache__
 migrations
 db.sqlite3
 media
+test.rest
 settings.py
 
 # Backup files # 

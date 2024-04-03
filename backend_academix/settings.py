@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     'CommunityApp.apps.CommunityappConfig',
     'RequestApp.apps.RequestappConfig',
     'BasicApp.apps.BasicappConfig',
-    'UserApp.apps.UserappConfig'
+    'UserApp.apps.UserappConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
