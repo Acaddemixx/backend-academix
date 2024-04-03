@@ -9,6 +9,7 @@ media
 test.rest
 settings.py
 
+
 # Backup files # 
 *.bak 
 
