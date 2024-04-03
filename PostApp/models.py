@@ -5,8 +5,8 @@ from AI import main
 class Post(models.Model):
     author = models.ForeignKey('UserApp.Student',null = True , on_delete=models.SET_NULL)
     club = models.ForeignKey('CommunityApp.Club', null=True, on_delete=models.SET_NULL)
-    section = models.ForeignKey('CommunityApp.Section', null=True, on_delete=models.SET_NULL, related_name='section_posts')
-    course = models.ForeignKey('CommunityApp.Section', null=True, on_delete=models.SET_NULL, related_name='course_posts')
+    section = models.ForeignKey('CommunityApp.Section', null=True, on_delete=models.SET_NULL)
+    course = models.ForeignKey('CommunityApp.Section', null=True, on_delete=models.SET_NULL)
     created_at = models.DateField(auto_now_add=True)
     content = models.TextField()
     #file field pic or pdf 
