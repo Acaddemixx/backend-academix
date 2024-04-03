@@ -29,7 +29,7 @@ class Event(models.Model):
     club = models.ForeignKey(Club, on_delete=models.CASCADE)#####
     start_time = models.DateField()
     end_time = models.DateField()
-    description = models.TextField()
+    description = models.TextField(null=True)
     embedding = VectorField(dimensions= 768 , null = True , blank = True)
 
     def set_embedding(self):
