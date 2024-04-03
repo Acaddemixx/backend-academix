@@ -37,6 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'PostApp.apps.PostappConfig',
+    'CommunityApp.apps.CommunityappConfig',
+    'RequestApp.apps.RequestappConfig',
+    'BasicApp.apps.BasicappConfig',
+    'UserApp.apps.UserappConfig'
 ]
 
 MIDDLEWARE = [
@@ -76,9 +81,9 @@ WSGI_APPLICATION = 'backend_academix.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Academix_DB',
-        'USER': 'Ermias', # ur pg user
-        'PASSWORD': '#1E1', # ur password
+        'NAME': 'academix_db',
+        'USER': 'root', # ur pg user
+        'PASSWORD': 'daniel12', # ur password
         'HOST': 'localhost',
         'PORT': '5432',
     }
