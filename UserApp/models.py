@@ -15,9 +15,9 @@ class MyUser(AbstractUser):
 class Student(MyUser):
     student_id = models.CharField()
     academic_year = models.DateField()
-    is_rep = models.BooleanField()
+    is_rep = models.BooleanField(null=True)
     section = models.ForeignKey('CommunityApp.Section', null=True, on_delete=models.SET_NULL, related_name='student')##
-    department = models.ForeignKey('BasicApp.Department', on_delete=models.CASCADE, related_name='student') ##
+    department = models.ForeignKey('BasicApp.Department', null=True, on_delete=models.CASCADE, related_name='student') ##
     groups = models.ManyToManyField(Group, related_name='student_users')
     user_permissions = models.ManyToManyField(Permission, related_name='student_users_permissions')
 
