@@ -19,7 +19,7 @@ class Post(models.Model):
         self.embedding = vector_text
 
     def save(self, *args, **kwargs):
-        self.set_embeddingg()
+        self.set_embedding()
         super().save(*args, **kwargs)
         
     def __str__(self) -> str:
@@ -37,7 +37,7 @@ class Comment(models.Model):
         self.embedding = vector_text
 
     def save(self, *args, **kwargs):
-        self.set_embeddingg()
+        self.set_embedding()
         super().save(*args, **kwargs)
         
     def __str__(self) -> str:

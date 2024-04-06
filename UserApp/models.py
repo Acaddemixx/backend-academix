@@ -8,7 +8,9 @@ class MyUser(AbstractUser):
     first_name = models.CharField()
     last_name = models.CharField()
     phone_number = models.CharField()
-    email = models.CharField()
+    email = models.EmailField()
+    is_student = models.BooleanField(default=False)
+    is_admin = models.BooleanField(default=False)
     class Meta:
         abstract = True
 
