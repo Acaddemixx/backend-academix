@@ -1,5 +1,5 @@
 from rest_framework.decorators import api_view,permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from rest_framework.response import Response
 from rest_framework import status
 from .serializer import *
@@ -192,3 +192,42 @@ def update_event(request, pd):
 
 #=========================================================================
 
+#++++++++++++++++++++++++ DELETE METHODES +++++++++++++++++++++++++++++++
+
+#------------------------- delete club -----------------------------------
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated , IsAdminUser])
+def delete_club(request , pk):
+    club = get_object_or_404(Club , id = pk)
+    serializer = ClubSerializer(instance=club)
+    serialized_data = serializer.data 
+    club.delete()
+    return Response({'deleted_club': serialized_data} , status=status.HTTP_202_ACCEPTED)
+
+#===========================================================================
+
+#------------------------- delete section ----------------------------------
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated , IsAdminUser])
+def delete_section(request , pk):
+    section = get_object_or_404(Section, id = pk)
+    serializer = SectionSerializer(instance=section)
+    serialized_data = serializer.data 
+    section.delete()
+    return Response({'deleted_section': serialized_data} , status=status.HTTP_202_ACCEPTED)
+
+#============================================================================
+
+#-------------------------- delete event ------------------------------------
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated , IsAdminUser])
+def delete_event(request , pk):
+    event = get_object_or_404(Event, id = pk)
+    serializer = EventSerializer(instance=event)
+    serialized_data = serializer.data 
+    event.delete()
+    return Response({'deleted_event': serialized_data} , status=status.HTTP_202_ACCEPTED)
+
+#============================================================================
