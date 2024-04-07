@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'RequestApp.apps.RequestappConfig',
     'BasicApp.apps.BasicappConfig',
     'UserApp.apps.UserappConfig',
-    'rest_framework'
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -137,3 +137,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+
