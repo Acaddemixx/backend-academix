@@ -140,6 +140,7 @@ def get_related_events(request):
 
 #=========================================================================
 
+
 #+++++++++++++++++++++++++ UPDATE METHODES ++++++++++++++++++++++++++++++
 
 
@@ -149,16 +150,45 @@ def get_related_events(request):
 @permission_classes([IsAuthenticated])
 def update_club(request, pd):
     club = get_object_or_404(Club , id = pd)
-    serializer = ClubSerializer(instance=club)
+    serializer = ClubSerializer(instance=club , data= request.data)
 
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data , status= status.HTTP_200_OK)
     else:
-        return Response(serializer.errors)
+        return Response(serializer.errors , status = status.HTTP_400_BAD_REQUEST)
     
 #=========================================================================
 
 #------------------------- update section ---------------------------------
 
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_section(request, pd):
+    section = get_object_or_404(Section , id = pd)
+    serializer = SectionSerializer(instance=section , data=request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data , status= status.HTTP_200_OK)
+    else:
+        return Response(serializer.errors , status = status.HTTP_400_BAD_REQUEST)
+
+#=========================================================================
+
+#----------------------------- update event ------------------------------
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_event(request, pd):
+    event = get_object_or_404(Event , id = pd)
+    serializer = EventSerializer(instance=event , data = request.data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data , status= status.HTTP_200_OK)
+    else:
+        return Response(serializer.errors , status = status.HTTP_400_BAD_REQUEST)
+
+#=========================================================================
 
