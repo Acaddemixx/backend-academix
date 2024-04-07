@@ -3,10 +3,10 @@ from pgvector.django import VectorField
 from AI import main
 # Create your models here.
 class Post(models.Model):
-    author = models.ForeignKey('UserApp.Student',null = True , on_delete=models.SET_NULL)
+    author = models.ForeignKey('UserApp.Student', null=True , on_delete=models.SET_NULL)
     club = models.ForeignKey('CommunityApp.Club', null=True, on_delete=models.SET_NULL)
-    section = models.ForeignKey('CommunityApp.Section', null=True, on_delete=models.SET_NULL, related_name='section_posts')
-    course = models.ForeignKey('CommunityApp.Section', null=True, on_delete=models.SET_NULL, related_name='course_posts')
+    section = models.ForeignKey('CommunityApp.Section', null=True, on_delete=models.SET_NULL)
+    course = models.ForeignKey('BasicApp.Course', null=True, on_delete=models.SET_NULL)
     created_at = models.DateField(auto_now_add=True)
     content = models.TextField(default='')
     file = models.FileField(upload_to='uploads/', blank=True)
@@ -44,7 +44,7 @@ class Comment(models.Model):
         return self.content
 
 class Like(models.Model):
-    user = models.ForeignKey('UserApp.Student', null = True , on_delete=models.SET_NULL)
+    user = models.ForeignKey('UserApp.Student', null=True , on_delete=models.SET_NULL)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
     def __str__(self) -> str:

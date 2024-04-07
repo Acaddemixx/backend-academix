@@ -1,5 +1,4 @@
 from django.db import models
-from UserApp.models import Admin
 from pgvector.django import VectorField
 from AI import main
 # Create your models here.

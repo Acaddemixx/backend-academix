@@ -1,6 +1,4 @@
 from django.db import models
-from BasicApp.models import Building
-from UserApp.models import Student
 from pgvector.django import VectorField
 from AI import main
 # Create your models here.
@@ -10,6 +8,7 @@ class Club(models.Model):
     overview = models.TextField()
     founder = models.OneToOneField('UserApp.Student', null=True, on_delete=models.SET_NULL, related_name='club_founder')
     members = models.ManyToManyField('UserApp.Student')
+    embedding = VectorField(dimensions= 768 , null = True , blank = True)
 
     def set_embedding(self):
         text = f"Club named: {self.name}, overview: {self.overview}"
@@ -31,7 +30,6 @@ class Event(models.Model):
     end_time = models.DateField()
     description = models.TextField(null=True)
     embedding = VectorField(dimensions= 768 , null = True , blank = True)
-
     def set_embedding(self):
         text = f"Event starting at: {self.start_time}, description: {self.description}"
         vector_text = main.embed(text)

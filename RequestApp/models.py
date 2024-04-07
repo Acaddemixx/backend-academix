@@ -1,8 +1,4 @@
 from django.db import models
-from UserApp.models import Student
-from CommunityApp.models import Club,Event
-
-
 # Create your models here.
 
 class Request(models.Model):
@@ -15,3 +11,6 @@ class Request(models.Model):
 class Report(models.Model):
     user = models.OneToOneField('UserApp.Student', on_delete=models.CASCADE) ##
     post = models.OneToOneField('PostApp.Post', on_delete=models.CASCADE) ##
+
+
+
