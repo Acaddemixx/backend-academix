@@ -84,9 +84,9 @@ WSGI_APPLICATION = 'backend_academix.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'academix_db',
-        'USER': 'root', # ur pg user
-        'PASSWORD': 'daniel12', # ur password
+        'NAME': 'Academix_DB',
+        'USER': 'Ermias', # ur pg user
+        'PASSWORD': '#1E1', # ur password
         'HOST': 'localhost',
         'PORT': '5432',
     }

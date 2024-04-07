@@ -1,7 +1,6 @@
 from django.db import models
 from pgvector.django import VectorField
 from AI import main
-# Create your models here.
 
 class Department(models.Model):
     head = models.OneToOneField('UserApp.Admin', null=True, on_delete=models.SET_NULL, related_name='department_head')
@@ -42,7 +41,6 @@ class Building(models.Model):
     block_number = models.IntegerField()
     type = models.CharField(max_length = 50)
     description = models.TextField()
-    #vector field comming
     embedding = VectorField(dimensions= 768 , null = True , blank = True)
     
     def set_embedding(self):

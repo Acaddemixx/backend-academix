@@ -62,8 +62,8 @@ def create_event(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_club(request):
-    club = get_object_or_404(Club , name = request.data['name'])
+def get_club(request , pk):
+    club = get_object_or_404(Club , id = pk)
     serializer = ClubSerializer(instance=club)
 
     return Response(serializer.data , status=status.HTTP_200_OK)
@@ -81,10 +81,12 @@ def get_all_clubs(request):
         
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_related_club(request):
-    club_name = request.data['name']
-    search_embedding = embed(club_name)
-    clubs = Club.objects.order_by(L2Distance('embedding' , search_embedding))
+def get_related_club(request , pk):
+    club = get_object_or_404(Club , id = pk)
+    text = f"Club named: {club.name}, overview: {club.overview}"
+
+    search_embedding = embed(text)
+    clubs = Club.objects.order_by(L2Distance('embedding' , search_embedding))[:10]
 
     serializer = ClubSerializer(instance=clubs , many = True)
 
@@ -96,13 +98,18 @@ def get_related_club(request):
 
 #----------------------- get section -----------------------
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def get_section(request):
-    section = get_object_or_404(Section , name = request.data['name'])
+@permission_classes([IsAuthenticated , IsAdminUser])
+def get_section(request , pk):
+    section = get_object_or_404(Section , id = pk)
     serializer = ClubSerializer(instance=section)
 
     return Response(serializer.data , status=status.HTTP_200_OK)
 
+def get_all_section(request , pk):
+    sections = Section.objects.all()
+    serializer = SectionSerializer(instance=sections , many = True)
+
+    return Response({'sections':serializer.data} , status=status.HTTP_200_OK)
 
 #=========================================================
 
@@ -111,8 +118,8 @@ def get_section(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_event(request):
-    event = get_object_or_404(Event , name = request.data['name'])
+def get_event(request , pk):
+    event = get_object_or_404(Event , id = pk)
     serializer = ClubSerializer(instance=event)
 
     if serializer.is_valid():
@@ -131,12 +138,16 @@ def get_all_events(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def get_related_events(request):
-    request_embedding = embed(request.data['name'])
-    events = Event.objects.order_by(L2Distance('embedding' , request_embedding))
+def get_related_events(request , pk):
+    event = get_object_or_404(Event , id = pk)
+
+    text = f"Event starting at: {event.start_time}, description: {event.description}"
+    request_embedding = embed(text)
+
+    events = Event.objects.order_by(L2Distance('embedding' , request_embedding))[:10]
     serializer = EventSerializer(instance=events , many = True)
 
-    return Response({'events':serializer.data} , status=status.HTTP_200_OK)
+    return Response({'events': serializer.data} , status=status.HTTP_200_OK)
 
 #=========================================================================
 
@@ -148,8 +159,8 @@ def get_related_events(request):
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
-def update_club(request, pd):
-    club = get_object_or_404(Club , id = pd)
+def update_club(request, pk):
+    club = get_object_or_404(Club , id = pk)
     serializer = ClubSerializer(instance=club , data= request.data)
 
     if serializer.is_valid():
@@ -164,8 +175,8 @@ def update_club(request, pd):
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
-def update_section(request, pd):
-    section = get_object_or_404(Section , id = pd)
+def update_section(request, pk):
+    section = get_object_or_404(Section , id = pk)
     serializer = SectionSerializer(instance=section , data=request.data)
 
     if serializer.is_valid():
@@ -180,8 +191,8 @@ def update_section(request, pd):
 
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
-def update_event(request, pd):
-    event = get_object_or_404(Event , id = pd)
+def update_event(request, pk):
+    event = get_object_or_404(Event , id = pk)
     serializer = EventSerializer(instance=event , data = request.data)
 
     if serializer.is_valid():
