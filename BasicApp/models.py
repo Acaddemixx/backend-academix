@@ -14,7 +14,7 @@ class Department(models.Model):
         self.embedding = vector_text
 
     def save(self, *args, **kwargs):
-        self.set_embeddingg()
+        self.set_embedding()
         super().save(*args, **kwargs)
 
 class Course(models.Model):
@@ -33,7 +33,7 @@ class Course(models.Model):
         self.embedding = vector_text
 
     def save(self, *args, **kwargs):
-        self.set_embeddingg()
+        self.set_embedding()
         super().save(*args, **kwargs)
 
 class Building(models.Model):
@@ -49,7 +49,7 @@ class Building(models.Model):
         self.embedding = vector_text
 
     def save(self, *args, **kwargs):
-        self.set_embeddingg()
+        self.set_embedding()
         super().save(*args, **kwargs)
     
 
