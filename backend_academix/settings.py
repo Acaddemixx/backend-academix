@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'BasicApp.apps.BasicappConfig',
     'UserApp.apps.UserappConfig',
     'rest_framework',
+    'rest_framework.authtoken'
 ]
 
 MIDDLEWARE = [
@@ -84,9 +85,9 @@ WSGI_APPLICATION = 'backend_academix.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'Academix_DB',
-        'USER': 'Ermias', # ur pg user
-        'PASSWORD': '#1E1', # ur password
+        'NAME': 'academix_db',
+        'USER': 'root', # ur pg user
+        'PASSWORD': 'daniel12', # ur password
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -135,7 +136,14 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+}
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+AUTH_USER_MODEL = 'UserApp.MyUser'

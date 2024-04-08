@@ -16,7 +16,7 @@ class Club(models.Model):
         self.embedding = vector_text
 
     def save(self, *args, **kwargs):
-        self.set_embeddingg()
+        self.set_embedding()
         super().save(*args, **kwargs)
 
 class Section(models.Model):
@@ -36,7 +36,7 @@ class Event(models.Model):
         self.embedding = vector_text
 
     def save(self, *args, **kwargs):
-        self.set_embeddingg()
+        self.set_embedding()
         super().save(*args, **kwargs)
 
 

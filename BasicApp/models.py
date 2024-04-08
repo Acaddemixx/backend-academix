@@ -3,7 +3,7 @@ from pgvector.django import VectorField
 from AI import main
 
 class Department(models.Model):
-    head = models.OneToOneField('UserApp.Admin', null=True, on_delete=models.SET_NULL, related_name='department_head')
+    head = models.OneToOneField('UserApp.Admin', default=None, null=True, on_delete=models.SET_NULL, related_name='department_head')
     name = models.CharField(max_length = 50)
     overview = models.TextField()
     embedding = VectorField(dimensions= 768 , null = True , blank = True)
