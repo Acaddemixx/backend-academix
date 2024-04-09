@@ -8,10 +8,29 @@ from BasicApp.models import Course
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from AI import general, main
+from PIL import Image
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_post(request):
+    gemini = general.LLM()
+    content_validation = gemini.verify_test_content(request.data['content'])
+    img_validation = True
+    
+    # img_file = request.data['file']
+    # if main.is_image(img_file):
+    #     img = Image.open(img_file)
+    #     img_validation = gemini.verify_image_content(img)
+
+    # if not img_validation:
+    #     report = "This content can not be posted, because: " + gemini.image_report(img)
+    #     return Response({'report': report}, status=status.HTTP_400_BAD_REQUEST)
+
+    if not content_validation:
+        report = "This content can not be posted"
+        return Response({'report': report}, status=status.HTTP_400_BAD_REQUEST)
+
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(author=request.user)
@@ -152,4 +171,14 @@ def like(request, id):
     Like.objects.create(user=request.user, post=post).save()
     return Response("liked", status=status.HTTP_200_OK)
 
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def create_requested_post(request):
+    post_object = request.data['post']
+    serializer = PostSerializer(data= post_object)
+    if serializer.is_valid():
+        serializer.save(author=request.user)
+        return Response({'post': serializer.data}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

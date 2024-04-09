@@ -30,7 +30,7 @@ def create_or_get_department(request):
 @api_view(['PUT', 'GET', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def department_detail(request, id):
-    '''getting , deleteing or updating deparment objict'''
+    '''getting , deleteing or updating deparment object'''
 
     if request.method == 'GET':
         department = get_object_or_404(Department, id=id)
@@ -80,7 +80,7 @@ def create_or_get_course(request):
 @api_view(['PUT', 'GET', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def course_detail(request, id):
-    '''getting , deleteing or updating course objict'''
+    '''getting , deleteing or updating course object'''
 
     if request.method == 'GET':
         course = get_object_or_404(Course, id=id)
@@ -128,7 +128,7 @@ def create_or_get_building(request):
 @api_view(['PUT', 'GET', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def building_detail(request, id):
-    '''getting , deleteing or updating course objict'''
+    '''getting , deleteing or updating course object'''
 
     if request.method == 'GET':
         building = get_object_or_404(Building, id=id)

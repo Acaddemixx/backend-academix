@@ -3,7 +3,7 @@ from pgvector.django import VectorField
 from AI import main
 # Create your models here.
 class Post(models.Model):
-    author = models.ForeignKey('UserApp.Student', null=True , on_delete=models.SET_NULL)
+    author = models.ForeignKey('UserApp.MyUser', null=True , on_delete=models.SET_NULL)
     club = models.ForeignKey('CommunityApp.Club', null=True, on_delete=models.SET_NULL)
     section = models.ForeignKey('CommunityApp.Section', null=True, on_delete=models.SET_NULL)
     course = models.ForeignKey('BasicApp.Course', null=True, on_delete=models.SET_NULL)
@@ -27,7 +27,7 @@ class Post(models.Model):
 
 class Comment(models.Model):
     content = models.TextField()
-    user = models.ForeignKey('UserApp.Student', on_delete=models.CASCADE)
+    user = models.ForeignKey('UserApp.MyUser', on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     embedding = VectorField(dimensions= 768 , null = True , blank = True)
 
@@ -44,7 +44,7 @@ class Comment(models.Model):
         return self.content
 
 class Like(models.Model):
-    user = models.ForeignKey('UserApp.Student', null=True , on_delete=models.SET_NULL)
+    user = models.ForeignKey('UserApp.MyUser', null=True , on_delete=models.SET_NULL)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
 
     def __str__(self) -> str:

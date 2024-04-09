@@ -27,7 +27,6 @@ class LLM:
     
         self._output = StrOutputParser()
         self._llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=GOOGLE_API_KEY)
-        self._llm = ChatGoogleGenerativeAI(model="gemini-pro-vision", google_api_key=VISION_API_KEY)
         self.prompt = PromptTemplate.from_template(system_message = self._systemMessage, template = self._template)
     
 
