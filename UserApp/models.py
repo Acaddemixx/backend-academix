@@ -5,25 +5,34 @@ from django.contrib.auth.models import Group, Permission
 
 
 class MyUser(AbstractUser):
-    first_name = models.CharField()
-    last_name = models.CharField()
+    gender = models.CharField(max_length=20)
     phone_number = models.CharField()
-    email = models.EmailField()
-    is_student = models.BooleanField(default=False)
-    is_admin = models.BooleanField(default=False)
-    class Meta:
-        abstract = True
+    student = models.OneToOneField('Student', null=True, on_delete=models.SET_NULL)
+    admin = models.OneToOneField('Admin', null=True, on_delete=models.SET_NULL)
 
-class Student(MyUser):
+
+class Student(models.Model):
     student_id = models.CharField()
-    academic_year = models.DateField()
-    is_rep = models.BooleanField(null=True)
+    academic_year = models.DateField(null=True)
+    is_rep = models.BooleanField(default=False)
     section = models.ForeignKey('CommunityApp.Section', null=True, on_delete=models.SET_NULL, related_name='student')##
-    department = models.ForeignKey('BasicApp.Department', null=True, on_delete=models.CASCADE, related_name='student') ##
+    department = models.ForeignKey('BasicApp.Department', null=True, on_delete=models.SET_NULL, related_name='student') ##
     groups = models.ManyToManyField(Group, related_name='student_users')
     user_permissions = models.ManyToManyField(Permission, related_name='student_users_permissions')
 
-class Admin(MyUser):
-    department = models.ForeignKey('BasicApp.Department', on_delete=models.CASCADE, related_name='admin') ##
+class Admin(models.Model):
+    department = models.ForeignKey('BasicApp.Department', default=1, on_delete=models.CASCADE, related_name='admin') ##
     groups = models.ManyToManyField(Group, related_name='admin_users')
     user_permissions = models.ManyToManyField(Permission, related_name='admin_users_permissions')
+
+
+    
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Post, Comment, Like
+from RequestApp.models import Request
 
 class PostSerializer(serializers.ModelSerializer):
     class Meta:

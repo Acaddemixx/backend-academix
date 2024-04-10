@@ -40,6 +40,10 @@ def load_all(prompt_embedding):
     
     return res
 
+def load_picture(file):
+    pass
+
+
 
 
     

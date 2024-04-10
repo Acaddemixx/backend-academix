@@ -1,11 +1,17 @@
 from rest_framework import serializers
-from .models import Student, Admin
+from .models import Student, Admin, MyUser
 import re
+
+
+class MyUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MyUser
+        fields = ['username', 'first_name', 'last_name', 'student',  'is_staff', 'phone_number', 'email', 'password']
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Student
-        fields = ['id', 'username', 'first_name', 'last_name', 'phone_number', 'email', 'student_id', 'is_student', 'academic_year', 'password']
+        fields = ['student_id', 'academic_year', 'is_rep', 'section', 'department']
     
     def validate_student_id(self, value):
         if not re.match('[a-zA-Z]{3}[0-9]{4}\/[0-9]{2}', value):
@@ -15,4 +21,4 @@ class StudentSerializer(serializers.ModelSerializer):
 class AdminSerializer(serializers.ModelSerializer):
     class Meta:
         model = Admin
-        fields = ['username', 'first_name', 'last_name', 'phone_number', 'email', 'student_id', 'is_admin', 'academic_year', 'password']
+        fields = ['department']

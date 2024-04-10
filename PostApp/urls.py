@@ -3,7 +3,7 @@ from . import views
 
 
 urlpatterns = [
-    path('posts/', views.create_post, name='retrieve-posts'),
+    path('posts/', views.create_post, name='create-posts'),
     path('posts/<int:id>', views.post_detail, name='delete-post'),
     path('section/<int:id>/posts', views.section_posts, name='section-post'),
     path('club/<int:id>/posts', views.club_posts, name='club-post'),
@@ -13,5 +13,6 @@ urlpatterns = [
     path('comments/<int:id>', views.update_or_delete_comment, name='create-section'),
     path('posts/<int:id>/likes', views.like, name='retrieve-posts'),
     path('likes/<int:id>', views.unlike, name='retrieve-posts'),
-    path('posts/<int:id>/likes/count', views.get_likes_count, name='retrieve-posts')
+    path('posts/<int:id>/likes/count', views.get_likes_count, name='retrieve-posts'),
+    path('request/<int:id>/post', views.create_requested_post, name='create-requested_post'),
 ]

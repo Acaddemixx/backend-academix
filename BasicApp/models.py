@@ -1,11 +1,9 @@
 from django.db import models
-from UserApp.models import Admin
 from pgvector.django import VectorField
 from AI import main
-# Create your models here.
 
 class Department(models.Model):
-    head = models.OneToOneField('UserApp.Admin', null=True, on_delete=models.SET_NULL, related_name='department_head')
+    head = models.OneToOneField('UserApp.MyUser', default=None, null=True, on_delete=models.SET_NULL, related_name='department_head')
     name = models.CharField(max_length = 50)
     overview = models.TextField()
     embedding = VectorField(dimensions= 768 , null = True , blank = True)
@@ -16,7 +14,7 @@ class Department(models.Model):
         self.embedding = vector_text
 
     def save(self, *args, **kwargs):
-        self.set_embeddingg()
+        self.set_embedding()
         super().save(*args, **kwargs)
 
 class Course(models.Model):
@@ -35,7 +33,7 @@ class Course(models.Model):
         self.embedding = vector_text
 
     def save(self, *args, **kwargs):
-        self.set_embeddingg()
+        self.set_embedding()
         super().save(*args, **kwargs)
 
 class Building(models.Model):
@@ -43,7 +41,6 @@ class Building(models.Model):
     block_number = models.IntegerField()
     type = models.CharField(max_length = 50)
     description = models.TextField()
-    #vector field comming
     embedding = VectorField(dimensions= 768 , null = True , blank = True)
     
     def set_embedding(self):
@@ -52,7 +49,7 @@ class Building(models.Model):
         self.embedding = vector_text
 
     def save(self, *args, **kwargs):
-        self.set_embeddingg()
+        self.set_embedding()
         super().save(*args, **kwargs)
     
 
