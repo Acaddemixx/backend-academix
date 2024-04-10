@@ -41,7 +41,7 @@ def edit_request(request,id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 #for a specific user to get accepted request
-def get_accepted_requests(id):
+def get_accepted_requests(request,id):
     req = get_object_or_404(Request, id=id)
     req = req.filter(status= 1)
     serialize = RequestSerializer(req, many=True)
@@ -86,6 +86,7 @@ def delete_request(request,id):
 @permission_classes([IsAuthenticated])
 def create_report(request):
     serializer = RequestSerializer(data=request.data)
+    if request.data.get('club') != None:
     if serializer.is_valid():
         serializer.save(user=request.user)
         return Response({'report': serializer.data}, status=status.HTTP_201_CREATED)
