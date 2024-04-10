@@ -168,8 +168,9 @@ def year_courses(request):
 def semester_courses(request):
     department = request.data['department']
     semester = request.data['semester']
+    year = request.data['year']
 
-    courses = Course.objects.filter(department= department , semester = semester)
+    courses = Course.objects.filter(department= department , semester = semester , year= year)
     serializer = CourseSerializer(instance=courses , many = True)
 
     if serializer.is_valid():
