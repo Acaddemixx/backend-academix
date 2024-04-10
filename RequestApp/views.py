@@ -86,7 +86,7 @@ def delete_request(request,id):
 @permission_classes([IsAuthenticated])
 def create_report(request):
     serializer = RequestSerializer(data=request.data)
-    if request.data.get('club') != None:
+    # if request.data.get('club') != None:
     if serializer.is_valid():
         serializer.save(user=request.user)
         return Response({'report': serializer.data}, status=status.HTTP_201_CREATED)
