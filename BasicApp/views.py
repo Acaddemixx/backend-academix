@@ -152,28 +152,31 @@ def building_detail(request, id):
     
     return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def year_courses(request):
-    department = request.data['department']
+    department = get_object_or_404(Department , id = request.data['department'])
     year = request.data['year']
 
     courses = Course.objects.filter(department= department , academic_year = year)
-    serializer = CourseSerializer(instance=courses , many = True)
+    serializer = CourseSerializer(courses , many = True)
 
-    if serializer.is_valid():
-        return Response(serializer.data, status=status.HTTP_200_OK)
-
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def semester_courses(request):
-    department = request.data['department']
+    department = get_object_or_404(Department , id = request.data['department'])
     semester = request.data['semester']
     year = request.data['year']
 
     courses = Course.objects.filter(department= department , semester = semester , year= year)
-    serializer = CourseSerializer(instance=courses , many = True)
+    serializer = CourseSerializer(courses , many = True)
 
-    if serializer.is_valid():
-        return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
