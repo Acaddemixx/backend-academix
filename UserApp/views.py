@@ -7,6 +7,7 @@ from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
+from django.db.models import Q
 
 
 @api_view(['POST'])
@@ -89,8 +90,29 @@ def get_users(request):
         all_users.append(dic)
     
     return Response({"students": all_users}, status=status.HTTP_200_OK)
-    
 
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_some_users(request):
+    username = request.data.get('username')
+    department = request.data.get('department')
+    academic_year = request.data.get('academic_year')
+
+    query = Q(department=department) | Q(username=username) | Q(academic_year=academic_year)
+
+    users = MyUser.objects.filter(query)
+    all_users = []
+    for user in users:
+        UserSerializer = MyUserSerializer(instance=user)
+        dic = UserSerializer.data
+        dic['student'] = StudentSerializer(instance=user.student).data
+        all_users.append(dic)
+    
+    return Response({"students": all_users}, status=status.HTTP_200_OK)
+
+
+    
 
 
 
