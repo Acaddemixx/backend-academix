@@ -151,3 +151,28 @@ def building_detail(request, id):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
+
+def year_courses(request):
+    department = request.data['department']
+    year = request.data['year']
+
+    courses = Course.objects.filter(department= department , academic_year = year)
+    serializer = CourseSerializer(instance=courses , many = True)
+
+    if serializer.is_valid():
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+def semester_courses(request):
+    department = request.data['department']
+    semester = request.data['semester']
+
+    courses = Course.objects.filter(department= department , semester = semester)
+    serializer = CourseSerializer(instance=courses , many = True)
+
+    if serializer.is_valid():
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
