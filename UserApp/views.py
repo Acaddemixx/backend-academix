@@ -27,7 +27,9 @@ def signUp(request):
         user.set_password(request.data['password'])
         user.student = student1
         user.save()
-
+        if not Student.objects.filter(section=user.student.section):
+            user.student.is_rep = True
+            user.student.save()
         serializer = MyUserSerializer(instance=user)
         serializer_copy = serializer.data.copy()
         serializer_copy['student'] = StudentSerializer(instance=student1).data

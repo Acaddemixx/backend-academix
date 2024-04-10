@@ -5,10 +5,12 @@ from django.contrib.auth.models import Group, Permission
 
 
 class MyUser(AbstractUser):
+    gender = models.CharField(max_length=20)
     phone_number = models.CharField()
     student = models.OneToOneField('Student', null=True, on_delete=models.SET_NULL)
     admin = models.OneToOneField('Admin', null=True, on_delete=models.SET_NULL)
-    
+
+
 class Student(models.Model):
     student_id = models.CharField()
     academic_year = models.DateField(null=True)

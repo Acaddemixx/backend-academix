@@ -6,8 +6,8 @@ from AI import main
 class Club(models.Model):
     name = models.CharField(max_length = 50)
     overview = models.TextField()
-    founder = models.OneToOneField('UserApp.Student', null=True, on_delete=models.SET_NULL, related_name='club_founder')
-    members = models.ManyToManyField('UserApp.Student')
+    founder = models.OneToOneField('UserApp.MyUser', null=True, on_delete=models.SET_NULL, related_name='club_founder')
+    members = models.ManyToManyField('UserApp.MyUser')
     embedding = VectorField(dimensions= 768 , null = True , blank = True)
 
     def set_embedding(self):
@@ -21,7 +21,7 @@ class Club(models.Model):
 
 class Section(models.Model):
     name = models.CharField(max_length = 50)
-    rep = models.OneToOneField('UserApp.Student', null=True, on_delete=models.SET_NULL, related_name='representative')
+    rep = models.OneToOneField('UserApp.MyUser', null=True, on_delete=models.SET_NULL, related_name='representative')
 
 class Event(models.Model):
     building = models.OneToOneField('BasicApp.Building', null=True, on_delete=models.SET_NULL) #####
