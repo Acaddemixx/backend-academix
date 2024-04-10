@@ -62,13 +62,13 @@ class LLM:
 
     def verify_image_content(self, path):
         model = vision.GenerativeModel('gemini-pro-vision')
-        prompt = "Classify this image as 'Educational' or 'Non-Educational' only"
+        prompt = "Classify this image as 'Educational' or 'Non-Educational'"
 
         img = Image.open(path)
         res = model.generate_content([prompt , img])
 
         # print(res.text)
-        if res.text == 'Educational':
+        if res.text.strip() == "Educational":
             return True
         else:
             return False
