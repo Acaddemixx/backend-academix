@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 from langchain_core.messages import SystemMessage
 from PIL import Image
 import google.generativeai as vision
+import io
 
 load_dotenv()
 GOOGLE_API_KEY = os.getenv('GEMNI_API_KEY')
@@ -23,7 +24,6 @@ class LLM:
                             Your answer should be based on that and kindly provide more information about the topic from your training data.
                             If the question is not related to the provided context use your training data to answer the question if it is possible,
                             If the question is not answerable, simply reply "I don't know." """
-
     
         self._output = StrOutputParser()
         self._llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=GOOGLE_API_KEY)
@@ -62,9 +62,9 @@ class LLM:
 
     def verify_image_content(self, path):
         model = vision.GenerativeModel('gemini-pro-vision')
-        
-        img = Image.open(path)
         prompt = "Classify this image as 'Educational' or 'Non-Educational' only"
+
+        img = Image.open(path)
         res = model.generate_content([prompt , img])
 
         # print(res.text)

@@ -17,15 +17,16 @@ def create_post(request):
     gemini = general.LLM()
     content_validation = gemini.verify_test_content(request.data['content'])
     img_validation = True
-    
-    # img_file = request.data['file']
-    # if main.is_image(img_file):
-    #     img = Image.open(img_file)
-    #     img_validation = gemini.verify_image_content(img)
+    print(gemini.image_report(request.data['file']))
 
-    # if not img_validation:
-    #     report = "This content can not be posted, because: " + gemini.image_report(img)
-    #     return Response({'report': report}, status=status.HTTP_400_BAD_REQUEST)
+    if main.is_image(request.data['file']):
+        img = Image.open(request.data['file'])
+        img_validation = gemini.verify_image_content(request.data['file'])
+        
+
+    if not img_validation:
+        report = "This content can not be posted, because: " + gemini.image_report(request.data['file'])
+        return Response({'report': report}, status=status.HTTP_400_BAD_REQUEST)
 
     if not content_validation:
         report = "This content can not be posted"

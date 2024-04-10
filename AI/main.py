@@ -1,6 +1,8 @@
 import os
 from dotenv import load_dotenv
 import google.generativeai as gemini_embedder
+from PIL import Image
+import io
 
 load_dotenv()
 GOOGLE_API_KEY = os.getenv('GEMNI_API_KEY') 
@@ -14,3 +16,19 @@ def embed(object):
         task_type="retrieval_document",))
     
     return result['embedding']
+
+# def in_memory_file_to_bytes(in_memory_file):
+#     try:
+#         image = Image.open(in_memory_file)
+#         image_bytes = image.tobytes()
+#         return image_bytes
+#     except OSError:
+#         return None
+
+def is_image(object):
+    try:
+        img = Image.open(object)
+        return True
+    except OSError:
+        return False
+    

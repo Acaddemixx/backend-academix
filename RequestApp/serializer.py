@@ -29,7 +29,6 @@ class RequestSerializer(serializers.ModelSerializer):
             return super().create(validated_data)
             
        
-
 class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report

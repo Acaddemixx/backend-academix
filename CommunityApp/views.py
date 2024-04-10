@@ -15,7 +15,7 @@ from AI.main import embed
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_club(request):
-    request_data = request.data
+    request_data = request.data['club']
     serializer = ClubSerializer(data= request_data)
 
     if serializer.is_valid():
@@ -45,7 +45,7 @@ def create_section(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_event(request):
-    request_data = request.data
+    request_data = request.data['event']
     serializer = EventSerializer(data= request_data)
 
     if serializer.is_valid():
