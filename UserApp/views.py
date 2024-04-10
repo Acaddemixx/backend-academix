@@ -89,8 +89,8 @@ def get_users(request):
         all_users.append(dic)
     
     return Response({"students": all_users}, status=status.HTTP_200_OK)
-
     
+
 
 
 
