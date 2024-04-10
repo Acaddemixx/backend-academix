@@ -41,28 +41,28 @@ def edit_request(request,id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 #for a specific user to get accepted request
-def get_accepted_requests(id):
+def get_accepted_requests(request,id):
     req = get_object_or_404(Request, id=id)
     req = req.filter(status= 1)
     serialize = RequestSerializer(req, many=True)
     return Response({'requests': serialize.data}, status=status.HTTP_200_OK)
  
 #for a specific user to get denied request
-def get_denied_requests(id):
+def get_denied_requests(request,id):
     req = get_object_or_404(Request, id=id)
     req = req.filter(status= 2)
     serialize = RequestSerializer(req, many=True)
     return Response({'requests': serialize.data}, status=status.HTTP_200_OK)
 
 #for a specific user to get pending request
-def get_denied_requests(id):
+def get_pending_requests(request,id):
     req = get_object_or_404(Request, id=id)
     req = req.filter(status= 3)
     serialize = RequestSerializer(req, many=True)
     return Response({'requests': serialize.data}, status=status.HTTP_200_OK)
 
 #for admin to get all the requests
-def get_pending_requests(request):
+def get_all_requests(request):
     if request.user.is_admin :
         requests = Request.objects.filter(status = 3)
         serializer = RequestSerializer(requests, many=True)
@@ -86,6 +86,7 @@ def delete_request(request,id):
 @permission_classes([IsAuthenticated])
 def create_report(request):
     serializer = RequestSerializer(data=request.data)
+    # if request.data.get('club') != None:
     if serializer.is_valid():
         serializer.save(user=request.user)
         return Response({'report': serializer.data}, status=status.HTTP_201_CREATED)
@@ -122,7 +123,7 @@ def get_pending_report(request):
     return Response({'error': "Not authorized"}, status=status.HTTP_403_FORBIDDEN)
 
 #for user to get all his reports
-def get_pending_requests(request,id):
+def get_all_report(request,id):
     reports = get_object_or_404(Request, id=id)
     serializer = RequestSerializer(reports, many=True)
     return Response({'reports': serializer.data}, status=status.HTTP_200_OK)
@@ -130,9 +131,9 @@ def get_pending_requests(request,id):
 #user deleting the reports
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
-def delete_request(request,id):
-    req = get_object_or_404(Request, id=id)
-    if req.user == request.user:
-        req.delete()
+def delete_report(request,id):
+    rep = get_object_or_404(Request, id=id)
+    if rep.user == request.user:
+        rep.delete()
         return Response("Deleted successfully", status=status.HTTP_200_OK)
     return Response({'error': "Not authorized"}, status=status.HTTP_403_FORBIDDEN)

@@ -5,7 +5,7 @@ from .serializer import StudentSerializer, AdminSerializer, MyUserSerializer
 from .models import Student, Admin, MyUser
 from rest_framework.authtoken.models import Token
 from django.shortcuts import get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 
 
@@ -74,3 +74,24 @@ def logout(request):
 
     Token.objects.filter(user=request.user).delete()
     return Response("successfully logged out", status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_users(request):
+    users = MyUser.objects.filter(admin=None)
+    all_users = []
+    for user in users:
+        UserSerializer = MyUserSerializer(instance=user)
+        dic = UserSerializer.data
+        # print(user, user.student)
+        dic['student'] = StudentSerializer(instance=user.student).data
+        all_users.append(dic)
+    
+    return Response({"students": all_users}, status=status.HTTP_200_OK)
+
+    
+
+
+
+        
