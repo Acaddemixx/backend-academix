@@ -8,6 +8,7 @@ from langchain_core.messages import SystemMessage
 from PIL import Image
 import google.generativeai as vision
 import io
+from . import main
 
 load_dotenv()
 GOOGLE_API_KEY = os.getenv('GEMNI_API_KEY')
@@ -31,8 +32,7 @@ class LLM:
     
 
     def get_context(self , question):
-        question_embedding = self.embed(question)
-        context_list = loader.load_all(question_embedding)
+        context_list = loader.load_all(question)
         return context_list
    
     def chat(self , question):

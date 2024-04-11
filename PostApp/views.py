@@ -64,7 +64,7 @@ def post_detail(request, id):
 
         serializer = PostSerializer(post).data
 
-        serializer['author'] = MyUserSerializer(instance = post.author)
+        serializer['author'] = MyUserSerializer(instance = post.author).data
 
         return Response({'post': serializer}, status=status.HTTP_200_OK)
     elif request.method == 'PUT':
@@ -202,4 +202,12 @@ def create_requested_post(request):
         serializer.save(author=request.user)
         return Response({'post': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+def get_comment_count(request, id):
+    post = get_object_or_404(Post, id=id)
+    like_count = Comment.objects.filter(post=post).count()
+
+    return Response({"like count": like_count}, status=status.HTTP_200_OK)
 

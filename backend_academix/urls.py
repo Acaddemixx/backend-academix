@@ -9,7 +9,8 @@ urlpatterns = [
     path('user/', include('UserApp.urls'), name='user-routes'),
     path('postapi/', include('PostApp.urls'), name='Post-routes'),
     path('community/', include('CommunityApp.urls'), name='community-route'),
-    path('basicapp/', include('BasicApp.urls'), name='basic-app')
+    path('basicapp/', include('BasicApp.urls'), name='basic-app'),
+    path('AI/' , include('AI.urls') , name = "AI-Chat")
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -3,11 +3,27 @@ from BasicApp.models import *
 from CommunityApp.models import *
 from PostApp.models import *
 from pgvector.django import L2Distance
+from dotenv import load_dotenv
+from langchain_google_genai import ChatGoogleGenerativeAI
+import os
+from langchain_core.output_parsers import StrOutputParser
+import google.generativeai as vision
 
 
+load_dotenv()
+GOOGLE_API_KEY = os.getenv('GEMNI_API_KEY')
 
-def load_all(prompt_embedding):
+output = StrOutputParser()
+model = vision.GenerativeModel('gemini-pro')
+template = "answer this question : {question} "
+
+
+def load_question(question):
+    return model.generate_content([template , question]).text
+
+def load_all(question):
     #gets the top 10 simmilar objects with the prompt_embedding and merges thier description and content
+    prompt_embedding = main.embed(question)
     courses = Course.objects.order_by(L2Distance('embedding' , prompt_embedding))[:10]
     departments = Department.objects.order_by(L2Distance('embedding' , prompt_embedding))[:10]
     buildings = Building.objects.order_by(L2Distance('embedding' , prompt_embedding))[:10]
@@ -37,6 +53,8 @@ def load_all(prompt_embedding):
     
     for comment in comments:
         res.append(comment.content)
+    
+    res.append(load_question(question))
     
     return res
 
