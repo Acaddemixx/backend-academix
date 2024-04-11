@@ -19,7 +19,7 @@ def create_post(request):
     content_validation = gemini.verify_test_content(request.data['content'])
     img_validation = True
 
-    if main.is_image(request.data['file']):
+    if request.data.get('file') and main.is_image(request.data.get('file')):
         img_validation = gemini.verify_image_content(request.data['file'])
     
         
@@ -65,7 +65,7 @@ def post_detail(request, id):
         serializer = PostSerializer(post).data
 
         serializer['author'] = MyUserSerializer(instance = post.author).data
-        serializer['count'] = Post.objects.filter(id=id).count()
+        # serializer['count'] = Post.objects.filter(id=id).count()
 
         return Response({'post': serializer}, status=status.HTTP_200_OK)
     elif request.method == 'PUT':

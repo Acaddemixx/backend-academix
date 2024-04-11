@@ -8,6 +8,11 @@ class PostSerializer(serializers.ModelSerializer):
         fields = ['id', 'author', 'created_at', 'content', 'file', 'section', 'club']
         read_only_fields = ['created_at', 'author', 'section', 'club']
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        ret['likes'] = Like.objects.filter(post_id= instance.id).count()
+        return ret
+
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
