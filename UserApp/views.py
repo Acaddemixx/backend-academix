@@ -91,6 +91,20 @@ def get_users(request):
     
     return Response({"students": all_users}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_staff_users(request):
+    users = MyUser.objects.filter(student=None)
+    all_users = []
+    for user in users:
+        UserSerializer = MyUserSerializer(instance=user)
+        dic = UserSerializer.data
+        # print(user, user.student)
+        dic['admin'] = StudentSerializer(instance=user.student).data
+        all_users.append(dic)
+    
+    return Response({"admin": all_users}, status=status.HTTP_200_OK)
+
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
