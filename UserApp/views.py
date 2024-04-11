@@ -80,7 +80,7 @@ def logout(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_users(request):
-    users = MyUser.objects.filter(admin=None)
+    users = MyUser.objects.filter(is_staff=False)
     all_users = []
     for user in users:
         UserSerializer = MyUserSerializer(instance=user)
@@ -94,7 +94,7 @@ def get_users(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_staff_users(request):
-    users = MyUser.objects.filter(student=None)
+    users = MyUser.objects.filter(is_staff=True)
     all_users = []
     for user in users:
         UserSerializer = MyUserSerializer(instance=user)
