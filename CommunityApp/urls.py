@@ -6,7 +6,8 @@ urlpatterns = [
     path('club/',views.get_all_clubs , name = 'display-all-clubs'),
     path('club/<int:id>', views.get_club , name = 'display-club'),
     path('club/<int:id>/related' , views.get_related_club , name = 'display-related-clubs'),
-    path('club/create' , views.create_club , name = 'create-club'),
+    path('club/create/' , views.create_club , name = 'create-club'),
+    path('request/club/create/' , views.create_club_from_request , name = 'create-requested-club'),
     path('club/<int:id>/update' , views.update_club , name = 'update-club'),
     path('club/<int:id>/delete' , views.delete_club , name= 'delete-club'),
 
@@ -17,6 +18,8 @@ urlpatterns = [
     path('section/<int:id>/delete', views.delete_section , name='delete-section'),
     
     path('event/', views.get_all_events , name='display-all-events'),
+    path('event/create', views.create_event , name='sreate-event'),
+    path('request/event/create', views.create_event_from_request, name='sreate-requested-event'),
     path('event/<int:id>', views.get_event , name = 'display-event'),
     path('event/<int:id>/related' , views.get_related_events , name = 'display-related-events'),
     path('event/<int:id>/update' , views.update_event , name='update-event'),

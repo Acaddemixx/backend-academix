@@ -7,6 +7,7 @@ from .models import *
 from django.shortcuts import get_object_or_404
 from pgvector.django import L2Distance
 from AI.main import embed
+from RequestApp.models import Notification , Request
 
 #++++++++++++++++++++ POST METHODS +++++++++++++++++++++++++++
 
@@ -15,11 +16,29 @@ from AI.main import embed
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_club(request):
-    request_data = request.data['club']
-    serializer = ClubSerializer(data= request_data)
+    serializer = ClubSerializer(data= request.data)
 
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(founder = request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated , IsAdminUser])
+def create_club_from_request(request):
+    club = request.data['club']
+    serializer = ClubSerializer(data= club)
+
+    notify = Notification(to_user = request.data['student'] , status = 2 , content = "Request Aproved")
+    notify.save()
+
+    request_obj = Request.objects.get(id = request.data['id'])
+    request_obj.delete()
+    
+    if serializer.is_valid():
+        serializer.save(founder = request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -45,11 +64,29 @@ def create_section(request):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_event(request):
-    request_data = request.data['event']
+    request_data = request.data
     serializer = EventSerializer(data= request_data)
 
     if serializer.is_valid():
         serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    else:
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated , IsAdminUser])
+def create_event_from_request(request):
+    event = request.data['event']
+    serializer = EventSerializer(data= event)
+
+    notify = Notification(to_user = request.data['student'] , status = 2 , content = "Request Aproved")
+    notify.save()
+    
+    request_obj = Request.objects.get(id = request.data['id'])
+    request_obj.delete()
+
+    if serializer.is_valid():
+        serializer.save(founder = request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -9,5 +9,5 @@ urlpatterns = [
     path('building/', views.create_or_get_building, name='create_or_get_building'),
     path('building/<int:id>', views.building_detail, name='building_detail'),
     path('department/course/year', views.year_courses, name='create_course'),
-    path('department/course/semester', views.semester_courses, name='create_course'),
+    path('<int:department>/<int:course>/<int:year>/<int:semester>', views.semester_courses, name='create_course'),
 ]

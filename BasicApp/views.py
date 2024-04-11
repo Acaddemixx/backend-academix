@@ -169,10 +169,11 @@ def year_courses(request):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def semester_courses(request):
-    department = get_object_or_404(Department , id = request.data['department'])
-    semester = request.data['semester']
-    year = request.data['year']
+def semester_courses(request , department , course , year , semester):
+    department = get_object_or_404(Department , id = department)
+    semester = semester
+    year = year
+    print(semester = semester)
 
     courses = Course.objects.filter(department= department , semester = semester , year= year)
     serializer = CourseSerializer(courses , many = True)

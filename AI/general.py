@@ -54,7 +54,7 @@ class LLM:
 
         chain = prompt | self._llm | self._output
 
-        if chain.invoke(content) == 'Educational':
+        if chain.invoke(content) == "Educational":
             return True
         else:
             return False
@@ -62,13 +62,13 @@ class LLM:
 
     def verify_image_content(self, path):
         model = vision.GenerativeModel('gemini-pro-vision')
-        prompt = "Classify this image as 'Educational' or 'Non-Educational' only"
+        prompt = "Classify this image as 'Educational' or 'Non educational' "
 
         img = Image.open(path)
         res = model.generate_content([prompt , img])
 
-        # print(res.text)
-        if res.text == 'Educational':
+        print(res.text)
+        if res.text.strip() == "Educational":
             return True
         else:
             return False

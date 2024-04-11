@@ -13,7 +13,7 @@ class MyUser(AbstractUser):
 
 class Student(models.Model):
     student_id = models.CharField()
-    academic_year = models.IntegerField(null=True)
+    # academic_year = models.IntegerField(null=True)
     is_rep = models.BooleanField(default=False)
     section = models.ForeignKey('CommunityApp.Section', null=True, on_delete=models.SET_NULL, related_name='student')##
     department = models.ForeignKey('BasicApp.Department', null=True, on_delete=models.SET_NULL, related_name='student') ##

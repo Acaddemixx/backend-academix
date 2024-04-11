@@ -1,13 +1,13 @@
 from django.shortcuts import get_object_or_404
-from django.db.models import Q
 from rest_framework.decorators import api_view, permission_classes
 from .serializer import PostSerializer, CommentSerializer
 from .models import Post, Comment, Like
-from CommunityApp.models import Section, Club
+from CommunityApp.models import Section, Club 
+from RequestApp.models import Notification , Request
 from BasicApp.models import Course
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated , IsAdminUser
 from AI import general, main
 from PIL import Image
 
@@ -17,13 +17,11 @@ def create_post(request):
     gemini = general.LLM()
     content_validation = gemini.verify_test_content(request.data['content'])
     img_validation = True
-    print(gemini.image_report(request.data['file']))
 
     if main.is_image(request.data['file']):
-        img = Image.open(request.data['file'])
         img_validation = gemini.verify_image_content(request.data['file'])
+    
         
-
     if not img_validation:
         report = "This content can not be posted, because: " + gemini.image_report(request.data['file'])
         return Response({'report': report}, status=status.HTTP_400_BAD_REQUEST)
@@ -37,6 +35,24 @@ def create_post(request):
         serializer.save(author=request.user)
         return Response({'post': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated , IsAdminUser])
+def create_post_from_request(request):
+    post = request.data['post']
+    serializer = PostSerializer(data= post)
+
+    notify = Notification(to_user = request.data['student'] , status = 2 , content = "Request Aproved")
+    notify.save()
+
+    request_obj = Request.objects.get(id = request.data['id'])
+    request_obj.delete()
+    
+    if serializer.is_valid():
+        serializer.save(author = request.data['student'])
+        return Response({'post': serializer.data}, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 
 @api_view(['GET', 'DELETE', 'PUT'])
@@ -100,7 +116,7 @@ def course_posts(request, id):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def general_posts(request):
-    posts = Post.objects.filter(Q(section=None) and Q(club=None))
+    posts = Post.objects.filter(section=None , club=None)
     serialize = PostSerializer(posts, many=True)
 
     return Response({'posts': serialize.data}, status=status.HTTP_200_OK)
