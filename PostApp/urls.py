@@ -14,7 +14,7 @@ urlpatterns = [
     path('posts/<int:id>/comments/count', views.get_comment_count, name='count-comment'),
     path('comments/<int:id>', views.update_or_delete_comment, name='create-section'),
     path('posts/<int:id>/likes', views.like, name='retrieve-posts'),
-    path('likes/<int:id>', views.unlike, name='retrieve-posts'),
+    path('posts/<int:id>/unlike', views.unlike, name='retrieve-posts'),
     path('posts/<int:id>/likes/count', views.get_likes_count, name='retrieve-posts'),
     path('request/<int:id>/post', views.create_requested_post, name='create-requested_post'),
 ]
