@@ -125,6 +125,24 @@ def get_some_users(request):
     
     return Response({"students": all_users}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_counts(request):
+    print('hello')
+    new_dict = {
+        "first_year": MyUser.objects.filter(is_staff=False, student__academic_year=1).count(),
+        "second_year": MyUser.objects.filter(is_staff=False, student__academic_year=2).count(),
+        "third_year": MyUser.objects.filter(is_staff=False, student__academic_year=3).count(),
+        "forth_year": MyUser.objects.filter(is_staff=False, student__academic_year=4).count(),
+        "fifth_year": MyUser.objects.filter(is_staff=False, student__academic_year=5).count(),
+        "female": MyUser.objects.filter(is_staff=False, gender='f').count(),
+        "male": MyUser.objects.filter(is_staff=False, gender='m').count(),
+        "total": MyUser.objects.filter(is_staff=False).count(),
+    }
+
+    return Response({"data": new_dict}, status=status.HTTP_200_OK)
+    
+
 
     
 
