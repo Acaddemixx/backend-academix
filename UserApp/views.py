@@ -141,7 +141,38 @@ def get_counts(request):
     }
 
     return Response({"data": new_dict}, status=status.HTTP_200_OK)
-    
+
+
+@api_view(['GET', 'POST', 'DELETE'])
+@permission_classes([IsAuthenticated])
+def user_detail(request, id):
+    user = get_object_or_404(MyUser, id=id)
+
+    if request.method == 'DELETE' and request.user.is_staff:
+        user.student.delete()
+        user.delete()
+        return Response("deleted successfully", status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        fields = set(['student_id', 'academic_year', 'semester', 'department', 'section'])
+
+        hashmap = {key: value for key, value in request.data.items() if key not in fields}
+        newMap = {key: value for key, value in request.data.items() if key in fields}
+
+        serilizer = MyUserSerializer(user, data=hashmap)
+        serilizer2 = StudentSerializer(user.student, data=newMap)
+
+        if serilizer.is_valid() and serilizer2.is_valid():
+            updated_user = serilizer.save()
+            updated_student = serilizer2.save()
+
+            serializer = MyUserSerializer(instance=updated_user)
+            serializer_copy = serializer.data.copy()
+            serializer_copy['student'] = StudentSerializer(instance=updated_student).data
+        
+            return Response({"user": serializer_copy}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    else:
+        return Response({"error": "unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
     
