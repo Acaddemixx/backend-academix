@@ -6,7 +6,7 @@ from rest_framework.decorators import api_view
 
 gemini = AI.general.LLM()
 
-@api_view(['GET'])
+@api_view(['POST'])
 def chat_api(request):
     print(request)
     question = request.data['question']
