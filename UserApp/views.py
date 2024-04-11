@@ -100,7 +100,7 @@ def get_staff_users(request):
         UserSerializer = MyUserSerializer(instance=user)
         dic = UserSerializer.data
         # print(user, user.student)
-        dic['admin'] = StudentSerializer(instance=user.student).data
+        dic['admin'] = AdminSerializer(instance=user.admin).data
         all_users.append(dic)
     
     return Response({"admin": all_users}, status=status.HTTP_200_OK)
