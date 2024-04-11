@@ -20,7 +20,7 @@ class Department(models.Model):
 class Course(models.Model):
     name = models.CharField(max_length = 50)
     department = models.ManyToManyField(Department)
-    academic_year = models.DateField()
+    academic_year = models.IntegerField(null=True)
     semester = models.IntegerField()
     credit_hour = models.IntegerField()
     lecture_hour = models.IntegerField()

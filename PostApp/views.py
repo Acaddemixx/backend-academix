@@ -10,6 +10,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated , IsAdminUser
 from AI import general, main
 from PIL import Image
+from UserApp.serializer import MyUserSerializer
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -61,8 +62,11 @@ def post_detail(request, id):
     if request.method == 'GET':
         post = get_object_or_404(Post, id=id)
 
-        serializer = PostSerializer(post)
-        return Response({'post': serializer.data}, status=status.HTTP_200_OK)
+        serializer = PostSerializer(post).data
+
+        serializer['author'] = MyUserSerializer(instance = post.author)
+
+        return Response({'post': serializer}, status=status.HTTP_200_OK)
     elif request.method == 'PUT':
         post = get_object_or_404(Post, id=id)
 

@@ -7,7 +7,7 @@ class Club(models.Model):
     name = models.CharField(max_length = 50)
     overview = models.TextField()
     founder = models.OneToOneField('UserApp.MyUser', null=True, on_delete=models.SET_NULL, related_name='club_founder')
-    members = models.ManyToManyField('UserApp.MyUser' , null=True)
+    members = models.ManyToManyField('UserApp.MyUser')
     embedding = VectorField(dimensions= 768 , null = True , blank = True)
 
     def set_embedding(self):

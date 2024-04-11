@@ -153,31 +153,15 @@ def building_detail(request, id):
     return Response({"error": "Not found"}, status=status.HTTP_404_NOT_FOUND)
 
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def year_courses(request):
-    department = get_object_or_404(Department , id = request.data['department'])
-    year = request.data['year']
-
-    courses = Course.objects.filter(department= department , academic_year = year)
-    serializer = CourseSerializer(courses , many = True)
-
-    return Response(serializer.data, status=status.HTTP_200_OK)
-
-
-
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def semester_courses(request , department , course , year , semester):
-    department = get_object_or_404(Department , id = department)
-    semester = semester
-    year = year
-    print(semester = semester)
+def semester_courses(request , department , year):
+    department = get_object_or_404(Department , id = department) 
 
-    courses = Course.objects.filter(department= department , semester = semester , year= year)
+    courses = Course.objects.filter(department = department , academic_year= year)
     serializer = CourseSerializer(courses , many = True)
 
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    return Response({"courses":serializer.data}, status=status.HTTP_200_OK)
 
 
