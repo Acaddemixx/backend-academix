@@ -5,14 +5,14 @@ from .models import Department, Course, Building
 class DepartmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Department
-        fields = "__all__"
+        fields = ['head', 'name', 'overview']
 
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = "__all__"
+        fields = ['name', 'deparment', 'academic_year', 'semester', 'credit_hr', 'lecture_hr', 'overview']
 
 class BuildingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Building
-        fields = "__all__"
+        fields = ['name', 'block_number', 'tyoe', 'description']
