@@ -16,6 +16,7 @@ def signUp(request):
 
     fields = set(['student_id', 'academic_year', 'semester', 'department', 'section'])
 
+
     hashmap = {key: value for key, value in request.data.items() if key not in fields}
     newMap = {key: value for key, value in request.data.items() if key in fields}
 
@@ -128,7 +129,6 @@ def get_some_users(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_counts(request):
-    print('hello')
     new_dict = {
         "first_year": MyUser.objects.filter(is_staff=False, student__academic_year=1).count(),
         "second_year": MyUser.objects.filter(is_staff=False, student__academic_year=2).count(),
@@ -148,7 +148,7 @@ def get_counts(request):
 def user_detail(request, id):
     user = get_object_or_404(MyUser, id=id)
 
-    if request.method == 'DELETE' and request.user.is_staff:
+    if request.method == 'DELETE':
         user.student.delete()
         user.delete()
         return Response("deleted successfully", status=status.HTTP_200_OK)

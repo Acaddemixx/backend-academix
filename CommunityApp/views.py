@@ -25,8 +25,7 @@ def create_club(request):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated , IsAdminUser])
+
 def create_club_from_request(club_jason):
     club = club_jason
     serializer = ClubSerializer(data= club)
@@ -36,7 +35,7 @@ def create_club_from_request(club_jason):
 
     
     if serializer.is_valid():
-        serializer.save(founder = request.user)
+        serializer.save(founder = club.founder)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -71,20 +70,19 @@ def create_event(request):
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated , IsAdminUser])
-def create_event_from_request(request):
-    event = request.data['event']
+
+def create_event_from_request(req):
+    event =req.event
     serializer = EventSerializer(data= event)
 
-    notify = Notification(to_user = request.data['student'] , status = 2 , content = "Request Aproved")
-    notify.save()
+    # notify = Notification(to_user = request.data['student'] , status = 2 , content = "Request Aproved")
+    # notify.save()
     
-    request_obj = Request.objects.get(id = request.data['id'])
+    request_obj = Request.objects.get(id = req.id)
     request_obj.delete()
 
     if serializer.is_valid():
-        serializer.save(founder = request.user)
+        serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -46,10 +46,10 @@ def delete_request(request,id):
         if req.post:
             create_post_from_request(req.post)
         elif req.club:
-            pass
+            create_club_from_request(req.club)
         elif req.event:
             pass
-        
+
     if req.student == request.user:
         req.delete()
         return Response("Deleted successfully", status=status.HTTP_200_OK)

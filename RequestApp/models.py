@@ -5,9 +5,9 @@ class Request(models.Model):
     description = models.TextField()
     status = models.IntegerField(default=None)
     student = models.OneToOneField('UserApp.MyUser', on_delete=models.CASCADE, related_name='student_request') ###
-    post = models.JSONField( null = True, on_delete=models.SET_NULL)
-    club = models.JSONField(null = True, on_delete=models.SET_NULL)
-    event = models.JSONField( null = True, on_delete=models.SET_NULL)
+    post = models.JSONField( null = True)
+    club = models.JSONField(null = True)
+    event = models.JSONField( null = True)
 
 class Report(models.Model):
     status = models.IntegerField(default=None)

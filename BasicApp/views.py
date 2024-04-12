@@ -9,11 +9,12 @@ from django.shortcuts import get_object_or_404
 '''department routes'''
 
 @api_view(['POST', 'GET'])
-@permission_classes([IsAuthenticated])
 def create_or_get_department(request):
     '''getting all department objects or creating deparment object'''
-
+    print('hello')
     if request.method == 'POST':
+        if not request.user.is_authenticated:
+            return Response({'error': 'Authentication required'}, status=status.HTTP_401_UNAUTHORIZED)
         serializer = DepartmentSerializer(data=request.data)
 
         if serializer.is_valid():
