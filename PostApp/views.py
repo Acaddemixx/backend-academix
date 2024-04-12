@@ -37,20 +37,16 @@ def create_post(request):
         return Response({'post': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-@api_view(['POST'])
-@permission_classes([IsAuthenticated , IsAdminUser])
-def create_post_from_request(request):
-    post = request.data['post']
+
+def create_post_from_request(post_obj):
+    post = post_obj
     serializer = PostSerializer(data= post)
 
-    notify = Notification(to_user = request.data['student'] , status = 2 , content = "Request Aproved")
+    notify = Notification(to_user = post_obj.author , status = 2 , content = "Request Aproved")
     notify.save()
-
-    request_obj = Request.objects.get(id = request.data['id'])
-    request_obj.delete()
     
     if serializer.is_valid():
-        serializer.save(author = request.data['student'])
+        serializer.save(author = post_obj.author)
         return Response({'post': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

@@ -23,8 +23,7 @@ class LLM:
         self._template = """ The student has asked you this question : {question},
                             If the question you are asked falls with in this context : {context}, 
                             Your answer should be based on that and kindly provide more information about the topic from your training data.
-                            If the question is not related to the provided context use your training data to answer the question if it is possible,
-                            If the question is not answerable, simply reply "I don't know." """
+                            If the question is not related to the provided context ,simply reply just 'No' """
     
         self._output = StrOutputParser()
         self._llm = ChatGoogleGenerativeAI(model="gemini-pro", google_api_key=GOOGLE_API_KEY)
@@ -37,10 +36,28 @@ class LLM:
    
     def chat(self , question):
         chain = self.prompt | self._llm | self._output
-        return chain.invoke({
+        answer = chain.invoke({
             "question": question,
             "context": self.get_context(question)
         })
+
+
+        # model = vision.GenerativeModel('gemini-pro')
+
+        if answer.strip().lower() == "no":
+            template = """ Answer this question , question : {question}, """
+            prompt = PromptTemplate.from_template(system_message = self._systemMessage, template = template)
+            chain = prompt | self._llm | self._output
+
+            answer = chain.invoke({
+                "question": question,
+            })
+
+            answer = f""" This inquiry can not be found in the Academix data base but, based on my understanding, {answer} """
+ 
+            
+        return answer
+
     
 
     def verify_test_content(self, content):

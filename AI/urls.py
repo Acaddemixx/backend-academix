@@ -3,5 +3,5 @@ from .views import chat_api
 
 
 urlpatterns = [
-    path('chat' , chat_api , name = 'caht'),
+    path('chat/' , chat_api , name = 'caht'),
 ]

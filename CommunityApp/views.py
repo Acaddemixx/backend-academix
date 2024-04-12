@@ -27,15 +27,13 @@ def create_club(request):
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated , IsAdminUser])
-def create_club_from_request(request):
-    club = request.data['club']
+def create_club_from_request(club_jason):
+    club = club_jason
     serializer = ClubSerializer(data= club)
 
-    notify = Notification(to_user = request.data['student'] , status = 2 , content = "Request Aproved")
+    notify = Notification(to_user = club.founder , status = 2 , content = "Request Aproved")
     notify.save()
 
-    request_obj = Request.objects.get(id = request.data['id'])
-    request_obj.delete()
     
     if serializer.is_valid():
         serializer.save(founder = request.user)
