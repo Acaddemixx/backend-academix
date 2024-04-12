@@ -93,11 +93,11 @@ def get_notfications(request):
     notfications = Notification.objects.filter(to_user = request.user)
     serializer = NotificationSerializer(notfications , many = True)
 
-    return Request({"notfication":serializer.data} , status.HTTP_200_OK)
+    return Response({"notfication":serializer.data} , status.HTTP_200_OK)
 
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_notfications(request , id):
     get_object_or_404(Notification , id = id).delete()
     
-    return Request("deleted" , status.HTTP_200_OK)
+    return Response("deleted" , status.HTTP_200_OK)
