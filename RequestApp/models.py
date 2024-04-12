@@ -3,7 +3,6 @@ from django.db import models
 
 class Request(models.Model):
     description = models.TextField()
-    status = models.IntegerField(default=None)
     student = models.OneToOneField('UserApp.MyUser', on_delete=models.CASCADE, related_name='student_request') ###
     post = models.JSONField( null = True)
     club = models.JSONField(null = True)

@@ -14,7 +14,7 @@ from RequestApp.models import Notification , Request
 #----------------- create club -------------------------------
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])
+@permission_classes([IsAuthenticated , IsAdminUser])
 def create_club(request):
     serializer = ClubSerializer(data= request.data)
 
@@ -26,16 +26,18 @@ def create_club(request):
     
 
 
-def create_club_from_request(club_jason):
-    club = club_jason
+def create_club_from_request(req):
+    club = req.club
+    club['owner'] = req.student
     serializer = ClubSerializer(data= club)
 
-    notify = Notification(to_user = club.founder , status = 2 , content = "Request Aproved")
+    notify = Notification(to_user = req.student , status = 2 , content = "Request Aproved")
     notify.save()
 
     
     if serializer.is_valid():
-        serializer.save(founder = club.founder)
+        serializer.save()
+        req.delete()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -75,14 +77,14 @@ def create_event_from_request(req):
     event =req.event
     serializer = EventSerializer(data= event)
 
-    # notify = Notification(to_user = request.data['student'] , status = 2 , content = "Request Aproved")
-    # notify.save()
-    
-    request_obj = Request.objects.get(id = req.id)
-    request_obj.delete()
+    Club.objects.filter(founder = req.student)
 
+    notify = Notification(to_user = req.student , status = 2 , content = "Request Aproved")
+    notify.save()
+    
     if serializer.is_valid():
         serializer.save()
+        req.delete()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

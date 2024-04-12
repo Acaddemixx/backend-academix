@@ -6,8 +6,7 @@ from CommunityApp.views import *
 class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Request
-        fields = ['description','status','student','post','club','event']
-        read_only_field = ['student','club']
+        fields = ['description','student','post','club','event']
  
 class ReportSerializer(serializers.ModelSerializer):
     class Meta:

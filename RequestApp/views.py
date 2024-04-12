@@ -44,17 +44,15 @@ def delete_request(request,id):
     req = get_object_or_404(Request, id=id)
     if request.data.get('status') == "Accepted":
         if req.post:
-            create_post_from_request(req.post)
+            create_post_from_request(req)
         elif req.club:
             create_club_from_request(req.club)
         elif req.event:
-            pass
-
-    if req.student == request.user:
+            create_event_from_request(req)
+    elif request.data.get('status') == "Decline":
         req.delete()
-        return Response("Deleted successfully", status=status.HTTP_200_OK)
-    return Response({'error': "Not authorized"}, status=status.HTTP_403_FORBIDDEN)
-
+    
+    return Response("successful", status=status.HTTP_200_OK)
 
 ################################################################################
 

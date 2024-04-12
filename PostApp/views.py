@@ -38,15 +38,17 @@ def create_post(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-def create_post_from_request(post_obj):
-    post = post_obj
+def create_post_from_request(req):
+    post = req.post
+    post['author'] = req.student
     serializer = PostSerializer(data= post)
 
-    notify = Notification(to_user = post_obj.author , status = 2 , content = "Request Aproved")
+    notify = Notification(to_user = req.student , status = 2 , content = "Request Aproved")
     notify.save()
     
     if serializer.is_valid():
-        serializer.save(author = post_obj.author)
+        serializer.save()
+        req.delete()
         return Response({'post': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
