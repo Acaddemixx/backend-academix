@@ -212,3 +212,14 @@ def get_comment_count(request, id):
 
     return Response({"like count": like_count}, status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def trending_post(request):
+    posts = Post.objects.all()
+    serializer = PostSerializer(posts, many=True).data
+
+    trending_post = sorted(serializer, key=lambda x : x['likes'], reverse=True)
+
+    return Response({"trending": trending_post[:5]}, status=status.HTTP_200_OK)
+
+
+
