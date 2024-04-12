@@ -9,18 +9,13 @@ from .models import Request
 from CommunityApp.views import create_club_from_request , create_event_from_request
 from PostApp.views import create_post_from_request
 
-#Request views
 
-# create 3 create request method
-#
-#
-#
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_request(request):
     serializer = RequestSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(student=request.user.student)
+        serializer.save(student=request.user)
         return Response({'request': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -29,11 +24,9 @@ def create_request(request):
 @permission_classes([IsAuthenticated , IsAdminUser])
 #for admin to get all the requests
 def get_all_requests(request):
-    if request.user.is_admin :
-        requests = Request.objects.all()
-        serializer = RequestSerializer(requests, many=True)
-        return Response({'requests': serializer.data}, status=status.HTTP_200_OK)
-    return Response({'error': "Not authorized"}, status=status.HTTP_403_FORBIDDEN)
+    requests = Request.objects.all()
+    serializer = RequestSerializer(requests, many=True)
+    return Response({'requests': serializer.data}, status=status.HTTP_200_OK)
 
 
 
@@ -61,7 +54,6 @@ def delete_request(request,id):
 @permission_classes([IsAuthenticated])
 def create_report(request):
     serializer = RequestSerializer(data=request.data)
-    # if request.data.get('club') != None:
     if serializer.is_valid():
         serializer.save(user=request.user)
         return Response({'report': serializer.data}, status=status.HTTP_201_CREATED)

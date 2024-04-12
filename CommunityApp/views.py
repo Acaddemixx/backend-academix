@@ -19,7 +19,7 @@ def create_club(request):
     serializer = ClubSerializer(data= request.data)
 
     if serializer.is_valid():
-        serializer.save(founder = request.user)
+        serializer.save(founder = request.user, context={"request": request})
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -168,7 +168,7 @@ def get_all_events(request):
     events = Event.objects.all()
     serializer = EventSerializer(instance=events , many = True)
 
-    return Response({'events':serializer.data} , status=status.HTTP_404_NOT_FOUND)
+    return Response({'events':serializer.data} , status=status.HTTP_200_OK)
  
 
 @api_view(['GET'])
