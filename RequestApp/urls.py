@@ -9,4 +9,6 @@ urlpatterns = [
       path('report/pending',views.get_pending_report, name='get-pending-report'),
       path('report/all',views.get_all_report, name='get-all-report'),
       path('report/<int:id>/delete',views.delete_report, name='delete-report'),
+      path('<int:id>/notification',views.delete_notfications, name='delete-notification'),
+      path('notification',views.get_notfications, name='get-notification'),
 ]

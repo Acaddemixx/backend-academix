@@ -2,10 +2,10 @@ from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated,IsAdminUser
-from .serializer import RequestSerializer
+from .serializer import RequestSerializer , NotificationSerializer
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Request
+from .models import Request,Notification
 from CommunityApp.views import create_club_from_request , create_event_from_request
 from PostApp.views import create_post_from_request
 
@@ -85,3 +85,19 @@ def delete_report(request,id):
         rep.delete()
         return Response("Deleted successfully", status=status.HTTP_200_OK)
     return Response({'error': "Not authorized"}, status=status.HTTP_403_FORBIDDEN)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def get_notfications(request):
+    notfications = Notification.objects.filter(to_user = request.user)
+    serializer = NotificationSerializer(notfications , many = True)
+
+    return Request({"notfication":serializer.data} , status.HTTP_200_OK)
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_notfications(request , id):
+    get_object_or_404(Notification , id = id).delete()
+    
+    return Request("deleted" , status.HTTP_200_OK)
