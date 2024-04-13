@@ -13,9 +13,11 @@ from PostApp.views import create_post_from_request
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_request(request):
-    serializer = RequestSerializer(data=request.data)
+    data = request.data
+    data['student'] = request.user
+    serializer = RequestSerializer(data=data)
     if serializer.is_valid():
-        serializer.save(student=request.user)
+        serializer.save()
         return Response({'request': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

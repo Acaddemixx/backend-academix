@@ -6,12 +6,12 @@ from CommunityApp.views import *
 class RequestSerializer(serializers.ModelSerializer):
     class Meta:
         model = Request
-        fields = ['description','student','post','club','event']
+        fields = ['id', 'description','student','post','club','event']
  
 class ReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = Report
-        fields = ['user','post','status']
+        fields = ['id', 'user','post','status']
         read_only_field = ['user','post']
 class NotificationSerializer(serializers.ModelSerializer):
     class Meta:
