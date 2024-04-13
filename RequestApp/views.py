@@ -5,7 +5,7 @@ from rest_framework.permissions import IsAuthenticated,IsAdminUser
 from .serializer import RequestSerializer , NotificationSerializer
 from rest_framework import status
 from rest_framework.response import Response
-from .models import Request,Notification
+from .models import Request, Notification
 from CommunityApp.views import create_club_from_request , create_event_from_request
 from PostApp.views import create_post_from_request
 
@@ -13,9 +13,7 @@ from PostApp.views import create_post_from_request
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_request(request):
-    data = request.data
-    data['student'] = request.user
-    serializer = RequestSerializer(data=data)
+    serializer = RequestSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save()
         return Response({'request': serializer.data}, status=status.HTTP_201_CREATED)
@@ -45,6 +43,7 @@ def delete_request(request,id):
         elif req.event:
             create_event_from_request(req)
     elif request.data.get('status') == "Decline":
+        Notification(to_user = req.student , status = 1 , content = "Request Declined")
         req.delete()
     
     return Response("successful", status=status.HTTP_200_OK)
