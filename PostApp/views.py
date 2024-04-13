@@ -40,19 +40,16 @@ def create_post(request):
 
 def create_post_from_request(req):
     post = req.post
-    post['author'] = req.student
-    serializer = PostSerializer(data= post)
+
+    if 'file' not in post.keys():
+        post['file'] = {}
+
+    post_obj = Post(author = req.student , content = post['content'], file = post['file'])
 
     notify = Notification(to_user = req.student , status = 2 , content = "Request Aproved")
     notify.save()
+    post_obj.save()
     
-    if serializer.is_valid():
-        serializer.save()
-        req.delete()
-        return Response({'post': serializer.data}, status=status.HTTP_201_CREATED)
-    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
-
 
 @api_view(['GET', 'DELETE', 'PUT'])
 @permission_classes([IsAuthenticated])
@@ -181,8 +178,7 @@ def get_likes_count(request, id):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def unlike(request, id):
-    Like.objects.filter(id=id).first().delete()
-    #get_object_or_404(Like, post_id=id).delete()
+    get_object_or_404(Like, post_id=id).delete()
     return Response("unliked", status=status.HTTP_200_OK)
 
 @api_view(['POST'])
@@ -195,7 +191,7 @@ def like(request, id):
     else:
         Like.objects.create(user=request.user, post=post).save()
     
-    return Response("success", status=status.HTTP_200_OK)
+    return Response("successs", status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])

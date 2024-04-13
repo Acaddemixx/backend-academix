@@ -1,6 +1,7 @@
 from django.db import models
 from pgvector.django import VectorField
 from AI import main
+from UserApp.models import MyUser
 # Create your models here.
 class Post(models.Model):
     author = models.ForeignKey('UserApp.MyUser', null=True , on_delete=models.SET_NULL)
@@ -17,6 +18,7 @@ class Post(models.Model):
         text = f"Post Author: {self.author.first_name}, content: {self.content}"
         vector_text = main.embed(text)
         self.embedding = vector_text
+
 
     def save(self, *args, **kwargs):
         self.set_embedding()

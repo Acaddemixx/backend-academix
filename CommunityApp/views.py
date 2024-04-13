@@ -7,9 +7,10 @@ from .models import *
 from django.shortcuts import get_object_or_404
 from pgvector.django import L2Distance
 from AI.main import embed
-from RequestApp.models import Notification , Request
+from RequestApp.models import Notification
+from UserApp.models import MyUser
 
-#+++++++++++++++++++++ POST METHODS +++++++++++++++++++++++++++
+#++++++++++++++++++++ POST METHODS +++++++++++++++++++++++++++
 
 #----------------- create club -------------------------------
 
@@ -27,19 +28,16 @@ def create_club(request):
 
 
 def create_club_from_request(req):
-    club = req.club
-    serializer = ClubSerializer(data= club)
+    club = req.club #club jason
+    club['founder'] = req.student
+    is_funder = Club.objects.filter(founder = club['founder']).first()
 
-    notify = Notification(to_user = req.student , status = 2 , content = "Request Aproved")
-    notify.save()
-    
-    if serializer.is_valid():
-        serializer.save(owner=req.student)
-        req.delete()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+    if not is_funder:
+        club_obj = Club(name = club['name'] , founder = club['founder'] , overview = club['overview'])
+        notify = Notification(to_user=req.student, status=2, content="Request Aproved")
+        notify.save()
+        club_obj.save()
+   
 #=============================================================================
 
 #------------------------- create section -------------------------------
@@ -73,18 +71,14 @@ def create_event(request):
 
 def create_event_from_request(req):
     event =req.event
-    serializer = EventSerializer(data= event)
 
+    event_obj = Event(club_id = event['club'] , building = event['building'],start_time = event['start_time'] , end_time = event['end_time'] , description = event['description'])
+    print(event_obj.__dict__)
     notify = Notification(to_user = req.student , status = 2 , content = "Request Aproved")
     notify.save()
-    
-    if serializer.is_valid():
-        serializer.save()
-        raise ValueError("hhhhhh")
-        req.delete()
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-    else:
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    event_obj.save()
+   
+
 #=============================================================================
 
 

@@ -15,13 +15,14 @@ from PostApp.views import create_post_from_request
 def create_request(request):
     serializer = RequestSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save()
+        req = serializer.save()
+        print(req.__dict__)
         return Response({'request': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated , IsAdminUser])
+@permission_classes([IsAuthenticated])
 #for admin to get all the requests
 def get_all_requests(request):
     requests = Request.objects.all()
@@ -32,7 +33,7 @@ def get_all_requests(request):
 
 #user deleting the request
 @api_view(['DELETE'])
-@permission_classes([IsAuthenticated , IsAdminUser])
+@permission_classes([IsAuthenticated])
 def delete_request(request,id):
     req = get_object_or_404(Request, id=id)
     if request.data.get('status') == 'A':
@@ -44,13 +45,13 @@ def delete_request(request,id):
             create_event_from_request(req)
     elif not request.data.get('status') == 'D':
         Notification(to_user = req.student , status = 1 , content = "Request Declined")
-    
+    print(req.id)
     req.delete()
     
     return Response("successful", status=status.HTTP_200_OK)
 
 ################################################################################
-
+  
 #Report views
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])

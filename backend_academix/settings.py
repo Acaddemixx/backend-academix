@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ilj-v=f-n!g!4wbz92y0ax86(8i6dc=#0e2ahw!)3wv_ql@u*%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['54.237.124.13']
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -90,8 +90,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'academix_db',
-        'USER': 'django', # ur pg user
-        'PASSWORD': 'passcode', # ur password
+        'USER': 'root', # ur pg user
+        'PASSWORD': 'daniel12', # ur password
         'HOST': 'localhost',
         'PORT': '5432',
     }
