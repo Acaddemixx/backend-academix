@@ -188,8 +188,13 @@ def unlike(request, id):
 @permission_classes([IsAuthenticated])
 def like(request, id):
     post = get_object_or_404(Post, id=id)
-    Like.objects.create(user=request.user, post=post).save()
-    return Response("liked", status=status.HTTP_200_OK)
+    like = Like.objects.filter(post=post).first()
+    if like:
+        like.delete()
+    else:
+        Like.objects.create(user=request.user, post=post).save()
+    
+    return Response("success", status=status.HTTP_200_OK)
 
 
 @api_view(['POST'])
