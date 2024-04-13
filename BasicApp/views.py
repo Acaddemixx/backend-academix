@@ -5,6 +5,7 @@ from rest_framework import status
 from .models import Department, Course, Building
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 
 '''department routes'''
 
@@ -165,4 +166,21 @@ def semester_courses(request , department , year):
 
     return Response({"courses":serializer.data}, status=status.HTTP_200_OK)
 
+
+@api_view('GET')
+@permission_classes([IsAuthenticated])
+def get_student_courses(request):
+    department = request.user.student.department
+    semester = request.data.get('semester')
+    year = request.data.get('year')
+
+    if semester and year:
+        query = (Q(department=department), Q(semester=semester), Q(year=year))
+    else:
+        query = (Q(department=department), Q(semester=semester) | Q(year=year))
+    courses = Course.objects.filter(query)
+
+    serializer = CourseSerializer(courses, many=True)
+
+    return Response({"courses": serializer.data}, status=status.HTTP_200_OK)
 

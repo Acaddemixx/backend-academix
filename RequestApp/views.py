@@ -41,6 +41,7 @@ def delete_request(request,id):
             create_post_from_request(req)
         elif req.club:
             create_club_from_request(req)
+            create_club_from_request(req)
         elif req.event:
             create_event_from_request(req)
     elif not request.data.get('status') == 'D':
