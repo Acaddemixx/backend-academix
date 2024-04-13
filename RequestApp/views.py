@@ -35,16 +35,17 @@ def get_all_requests(request):
 @permission_classes([IsAuthenticated , IsAdminUser])
 def delete_request(request,id):
     req = get_object_or_404(Request, id=id)
-    if request.data.get('status') == "Accepted":
+    if request.data.get('status') == 'A':
         if req.post:
             create_post_from_request(req)
         elif req.club:
-            create_club_from_request(req.club)
+            create_club_from_request(req)
         elif req.event:
             create_event_from_request(req)
-    elif request.data.get('status') == "Decline":
+    elif not request.data.get('status') == 'D':
         Notification(to_user = req.student , status = 1 , content = "Request Declined")
-        req.delete()
+    
+    req.delete()
     
     return Response("successful", status=status.HTTP_200_OK)
 
@@ -102,3 +103,4 @@ def delete_notfications(request , id):
     get_object_or_404(Notification , id = id).delete()
     
     return Response("deleted" , status.HTTP_200_OK)
+

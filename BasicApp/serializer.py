@@ -10,7 +10,7 @@ class DepartmentSerializer(serializers.ModelSerializer):
 class CourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Course
-        fields = ["id", 'name', 'deparment', 'academic_year', 'semester', 'credit_hr', 'lecture_hr', 'overview']
+        fields = ["id", 'name', 'department', 'academic_year', 'semester', 'credit_hour', 'lecture_hour', 'overview']
 
 class BuildingSerializer(serializers.ModelSerializer):
     class Meta:

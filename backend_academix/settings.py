@@ -26,7 +26,7 @@ SECRET_KEY = 'django-insecure-ilj-v=f-n!g!4wbz92y0ax86(8i6dc=#0e2ahw!)3wv_ql@u*%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['54.237.124.13']
 
 
 # Application definition
@@ -44,10 +44,12 @@ INSTALLED_APPS = [
     'BasicApp.apps.BasicappConfig',
     'UserApp.apps.UserappConfig',
     'rest_framework',
-    'rest_framework.authtoken'
+    'rest_framework.authtoken',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -57,6 +59,8 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'backend_academix.urls'
 
@@ -86,8 +90,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'academix_db',
-        'USER': 'root', # ur pg user
-        'PASSWORD': 'daniel12', # ur password
+        'USER': 'django', # ur pg user
+        'PASSWORD': 'passcode', # ur password
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -129,6 +133,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = 'static/'
 
 # Default primary key field type

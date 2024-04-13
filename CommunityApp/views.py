@@ -9,7 +9,7 @@ from pgvector.django import L2Distance
 from AI.main import embed
 from RequestApp.models import Notification , Request
 
-#++++++++++++++++++++ POST METHODS +++++++++++++++++++++++++++
+#+++++++++++++++++++++ POST METHODS +++++++++++++++++++++++++++
 
 #----------------- create club -------------------------------
 
@@ -28,15 +28,13 @@ def create_club(request):
 
 def create_club_from_request(req):
     club = req.club
-    club['owner'] = req.student
     serializer = ClubSerializer(data= club)
 
     notify = Notification(to_user = req.student , status = 2 , content = "Request Aproved")
     notify.save()
-
     
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(owner=req.student)
         req.delete()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:
@@ -77,13 +75,12 @@ def create_event_from_request(req):
     event =req.event
     serializer = EventSerializer(data= event)
 
-    Club.objects.filter(founder = req.student)
-
     notify = Notification(to_user = req.student , status = 2 , content = "Request Aproved")
     notify.save()
     
     if serializer.is_valid():
         serializer.save()
+        raise ValueError("hhhhhh")
         req.delete()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     else:

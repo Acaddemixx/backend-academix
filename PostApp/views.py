@@ -181,7 +181,8 @@ def get_likes_count(request, id):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def unlike(request, id):
-    get_object_or_404(Like, post_id=id).delete()
+    Like.objects.filter(id=id).first().delete()
+    #get_object_or_404(Like, post_id=id).delete()
     return Response("unliked", status=status.HTTP_200_OK)
 
 @api_view(['POST'])

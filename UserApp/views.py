@@ -171,8 +171,10 @@ def user_detail(request, id):
         
             return Response({"user": serializer_copy}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    else:
-        return Response({"error": "unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
+    elif request.method == 'GET':
+        user1 = MyUserSerializer(instance=user).data
+        return Response({'user': user1}, status=status.HTTP_200_OK)
+    return Response({"error": "unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
 
 
     
