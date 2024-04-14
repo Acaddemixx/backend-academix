@@ -167,7 +167,7 @@ def semester_courses(request , department , year):
     return Response({"courses":serializer.data}, status=status.HTTP_200_OK)
 
 
-@api_view('GET')
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_student_courses(request):
     department = request.user.student.department
