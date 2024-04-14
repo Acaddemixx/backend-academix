@@ -9,6 +9,9 @@ class MyUser(AbstractUser):
     phone_number = models.CharField()
     student = models.OneToOneField('Student', null=True, on_delete=models.SET_NULL)
     admin = models.OneToOneField('Admin', null=True, on_delete=models.SET_NULL)
+    telegram = models.CharField(max_length=20 , null=True)
+    linkedin = models.CharField(max_length=20 , null=True)
+    instagram = models.CharField(max_length=20 , null=True)
 
 
 class Student(models.Model):

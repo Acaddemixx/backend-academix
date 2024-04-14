@@ -8,6 +8,7 @@ from django.shortcuts import get_object_or_404
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.authentication import TokenAuthentication
 from django.db.models import Q
+from CommunityApp.models import Section
 
 
 @api_view(['POST'])
@@ -22,15 +23,22 @@ def signUp(request):
     serializer = MyUserSerializer(data=hashmap)
     student = StudentSerializer(data=newMap)
 
+    newMap.pop('section')
+
     if serializer.is_valid() and student.is_valid():
         user = serializer.save()
         student1 = student.save()
         user.set_password(request.data['password'])
         user.student = student1
-        user.save()
-        if not Student.objects.filter(section=user.student.section, department = user.student.department, academic_year=user.student.academic_year):
+        section = Section.objects.filter(name=request.data['section'], year=user.student.academic_year, department=user.student.department).first()
+        if not section:
+            section = Section(year=user.student.academic_year, department=user.student.department, name=request.data['section'])
+            section.rep = user
+            section.save()
             user.student.is_rep = True
-            user.student.save()
+        user.student.section = section
+        user.student.save()
+        user.save()
         serializer = MyUserSerializer(instance=user)
         serializer_copy = serializer.data.copy()
         serializer_copy['student'] = StudentSerializer(instance=student1).data

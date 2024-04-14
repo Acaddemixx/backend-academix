@@ -22,6 +22,8 @@ class Club(models.Model):
 class Section(models.Model):
     name = models.CharField(max_length = 50)
     rep = models.OneToOneField('UserApp.MyUser', null=True, on_delete=models.SET_NULL, related_name='representative')
+    year = models.IntegerField(default=None)
+    department = models.ForeignKey('BasicApp.Department', null=True , on_delete=models.CASCADE)
 
 class Event(models.Model):
     building = models.OneToOneField('BasicApp.Building', null=True, on_delete=models.SET_NULL) #####

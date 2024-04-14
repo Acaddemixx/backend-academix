@@ -33,7 +33,7 @@ def create_post(request):
 
     serializer = PostSerializer(data=request.data)
     if serializer.is_valid():
-        serializer.save(author=request.user)
+        serializer.save(author=request.user, section=request.user.student.section)
         return Response({'post': serializer.data}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -86,11 +86,8 @@ def post_detail(request, id):
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
-def section_posts(request, id):
-    section = get_object_or_404(Section, id=id)
-    if section != request.user.section:
-        return Response({'error': "Not authorized"}, status=status.HTTP_403_FORBIDDEN)
-    posts = Post.objects.filter(section=section)
+def section_posts(request):
+    posts = Post.objects.filter(section=request.user.student.section)
     serialize = PostSerializer(posts, many=True)
     return Response({'posts': serialize.data}, status=status.HTTP_200_OK)
 
