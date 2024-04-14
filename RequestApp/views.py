@@ -8,6 +8,8 @@ from rest_framework.response import Response
 from .models import Request, Notification
 from CommunityApp.views import create_club_from_request , create_event_from_request
 from PostApp.views import create_post_from_request
+from .models import Report
+from PostApp.models import Post
 
 
 @api_view(['POST'])
@@ -57,10 +59,17 @@ def delete_request(request,id):
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def create_report(request):
+    report_count = Report.objects.filter(post_id=request.data.get('post')).count()
+
+    if report_count >= 5:
+        Post.objects.filter(post_id=request.data.get('post')).delete()
+        return Response("deleted", status=status.HTTP_201_CREATED)
+
     serializer = RequestSerializer(data=request.data)
     if serializer.is_valid():
         serializer.save(user=request.user)
-        return Response({'report': serializer.data}, status=status.HTTP_201_CREATED)
+
+        return Response({'report': report_count + 1}, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
