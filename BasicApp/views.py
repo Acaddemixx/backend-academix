@@ -175,9 +175,9 @@ def get_student_courses(request):
     year = request.data.get('year')
 
     if semester and year:
-        query = (Q(department=department), Q(semester=semester), Q(year=year))
+        query = (Q(department=department) & Q(semester=semester) & Q(academic_year=year))
     else:
-        query = (Q(department=department), Q(semester=semester) | Q(year=year))
+        query = (Q(department=department) & Q(semester=semester) | Q(academic_year=year))
     courses = Course.objects.filter(query)
 
     serializer = CourseSerializer(courses, many=True)

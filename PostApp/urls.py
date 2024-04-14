@@ -18,4 +18,5 @@ urlpatterns = [
     path('posts/<int:id>/likes/count', views.get_likes_count, name='retrieve-posts'),
     path('request/<int:id>/post', views.create_requested_post, name='create-requested_post'),
     path('posts/trending', views.trending_post, name='trending_post'),
+    path('<int:id>/download', views.download_file, name='download_file'),
 ]

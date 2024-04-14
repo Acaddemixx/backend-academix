@@ -11,6 +11,8 @@ from rest_framework.permissions import IsAuthenticated , IsAdminUser
 from AI import general, main
 from PIL import Image
 from UserApp.serializer import MyUserSerializer
+import mimetypes
+from django.http import HttpResponse
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
@@ -219,4 +221,19 @@ def trending_post(request):
     return Response({"trending": trending_post[:5]}, status=status.HTTP_200_OK)
 
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated, IsAdminUser])
+def download_file(request, id):
+    post = get_object_or_404(Post, id=id)
+
+    if post.file:
+        with open(post.file, 'rb') as f:
+            fl_path = f.read()
+    
+    mime_type, _ = mimetypes.guess_type(fl_path)
+    
+    response = HttpResponse(fl_path, content_type=mime_type)
+    response['Content-Disposition'] = f"attachment; filename={post.file}"
+    
+    return response
 

@@ -9,4 +9,5 @@ urlpatterns = [
     path('building/', views.create_or_get_building, name='create_or_get_building'),
     path('building/<int:id>', views.building_detail, name='building_detail'),
     path('department/<int:department>/year/<int:year>/', views.semester_courses, name='create_course'),
+    path('courses/student', views.get_student_courses, name='student_course'),
 ]
