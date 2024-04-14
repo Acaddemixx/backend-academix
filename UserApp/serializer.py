@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Student, Admin, MyUser
 import re
+from BasicApp.models import Department
 
 
 class MyUserSerializer(serializers.ModelSerializer):
@@ -8,6 +9,11 @@ class MyUserSerializer(serializers.ModelSerializer):
         model = MyUser
         fields = ['id', 'username', 'first_name', 'last_name', 'student',  'is_staff', 'phone_number', 'email', 'password', 'gender', 'telegram', 'linkedin', 'instagram']
 
+    def to_representation(self, instance):
+        ret = super().to_representation(instance)
+        department = Department.objects.filter(id = instance.department)
+
+        ret['department_name'] = department.name
 
 class StudentSerializer(serializers.ModelSerializer):
     class Meta:
